@@ -7,10 +7,11 @@ import Intro from '../components/Intro';
 import AddBudgetForm from '../components/AddBudgetForm';
 
 //helper functions
-import { createBudget, createExpense, fetchData, wait } from '../helpers';
+import { createBudget, createExpense, fetchData, delay } from '../helpers';
 import { toast } from 'react-toastify';
 import AddExpenseForm from '../components/AddExpenseForm';
 import BudgetItem from '../components/BudgetItem';
+import ExpeneseTable from '../components/ExpenseTable';
 
 export function dashboardLoader ()
 {
@@ -22,7 +23,7 @@ export function dashboardLoader ()
 
 export async function dashboardAction ({request})
 {
-    await wait();
+    await delay();
     let data = await request.formData();
     let {_action, ...values} = Object.fromEntries(data);
     //new user submition
@@ -73,7 +74,7 @@ export async function dashboardAction ({request})
   }
 
 export default function Dashboard() {
-  const {userName, budgets} = useLoaderData();
+  const {userName, budgets, expenses} = useLoaderData();
   return (
     <div>{
         userName ? (<div className='dashboard'>
@@ -86,7 +87,7 @@ export default function Dashboard() {
                         <AddExpenseForm budgets = {budgets}/>
                       </div>
                       <h2>Existing Budgets</h2>
-                      <div className="budges">
+                      <div className="budgets">
                         {
                           budgets.map((budget) => {
                             return <BudgetItem budget={budget}
@@ -94,6 +95,17 @@ export default function Dashboard() {
                           })
                         }
                       </div>
+                      {
+                        expenses && expenses.length > 0 
+                        && (
+                          <div className='grid-md'>
+                              <h2>Recent Expenses</h2>
+                              <ExpeneseTable expenses = {expenses.sort((a,b)=> {
+                                return b.createAt - a.createAt;
+                              })}/>
+                          </div>
+                        )
+                      }
                     </div> : 
                     <div className="grid-lg">
                       <p>Personal budgeting is the secret to financial freedom.</p>

@@ -1,5 +1,5 @@
-export const wait = () => {
-   return new Promise(res => setTimeout(res, Math.random * 20000))};
+export const delay = () => new Promise(res => 
+    setTimeout(res, Math.random() * 2000))
 
 export const fetchData = (key) => {
     return JSON.parse(localStorage.getItem(key));
@@ -49,12 +49,20 @@ export function createExpense ({name, amount, budgetId})
 
 export const calculateSpentByBudget = (budgetId) => {
     const expenses = fetchData('expenses') ?? [];
-    const budgetSpents = expenses.reduce((acc, expense) =>{
+    const budgetSpent = expenses.reduce((acc, expense) =>{
         if(expense.budgetId !== budgetId) return acc;
         return acc+= expense.amount;
-    }, 0);
+    }, 0); 
+    return budgetSpent;
 }
 
+//format precentage
+ export const formatingPercentage = (amount) => {
+    return amount.toLocaleString(undefined, {
+        style : "percent",
+        minimumFractionDigits : 0
+    })
+ }
 //format currency
 
 export const formatCurrency = (amount) => {

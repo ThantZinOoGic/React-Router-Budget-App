@@ -49,25 +49,25 @@ export default function AddExpenseForm({budgets}) {
                             inputMode='decimal'
                         />
                     </div>
-                    <div className="grid-xs" hidden={budgets.length ==1}>
-                        <label htmlFor="newExpenseBudget">Budget Category</label>
-                        <select name='newExpenseBudget'
-                                id='newExpenseBudget'
-                                required>
-                            {
-                                budgets.sort((a,b)=> a.createAt - b.createAt).map(budget=>{
-                                    return <option value={budget.id}
-                                            key={budget.id}>
-                                        { budget.name}
-                                    </option>
-                                })
-                            }
-                        </select>
-                    </div>
-                    <input type="hidden" name='_action' value="createExpense"/>
-                    <button type='submit' 
+                </div>
+                <div className="grid-xs" hidden={budgets.length ==1}>
+                    <label htmlFor="newExpenseBudget">Budget Category</label>
+                    <select name='newExpenseBudget'
+                            id='newExpenseBudget'
+                            required>
+                        {
+                            budgets.sort((a,b)=> a.createAt - b.createAt).map(budget=>{
+                                return <option value={budget.id}
+                                        key={budget.id}>
+                                    { budget.name}
+                                </option>
+                            })
+                        }
+                    </select>
+                </div>
+                <input type="hidden" name='_action' value="createExpense"/>
+                <button type='submit' 
                             className='btn btn--dark' 
-                            style={{ marginTop: '10px' }}
                             disabled={isSubmitting}>
                         {isSubmitting ? 
                             (<span> Submitting ...</span>) : 
@@ -75,9 +75,7 @@ export default function AddExpenseForm({budgets}) {
                                 <span>Add Expense</span>
                                 <PlusCircleIcon width={20}/>
                             </div>)}
-                    </button>
-                </div>
-
+                </button>
         </fetcher.Form>
     </div>
   )

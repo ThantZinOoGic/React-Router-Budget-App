@@ -51,11 +51,11 @@ export default function AddBudgetForm() {
                     style={{ marginTop: '10px' }}
                     disabled={isSubmitting}>
                 {isSubmitting ? 
-                                (<span>Create Budget ...</span>) : 
-                                (<div>
+                                <span>Submitting...</span> : 
+                                (<>
                                     <span>Create Budget</span>
                                     <CurrencyDollarIcon width={20}/>
-                                </div>)}
+                                </>)}
             </button>
         </fetcher.Form>
     </div>
