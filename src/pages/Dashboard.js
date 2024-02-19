@@ -1,5 +1,5 @@
 // react router dom hook
-import { useLoaderData } from 'react-router-dom';
+import { Link, useLoaderData } from 'react-router-dom';
 
 //component
 
@@ -7,7 +7,7 @@ import Intro from '../components/Intro';
 import AddBudgetForm from '../components/AddBudgetForm';
 
 //helper functions
-import { createBudget, createExpense, fetchData, delay } from '../helpers';
+import { createBudget, createExpense, fetchData, delay, deleteItem } from '../helpers';
 import { toast } from 'react-toastify';
 import AddExpenseForm from '../components/AddExpenseForm';
 import BudgetItem from '../components/BudgetItem';
@@ -71,6 +71,20 @@ export async function dashboardAction ({request})
         throw new Error("There was a problem creating your Expenese");
       }
     }
+
+    //delete expensess
+    if(_action == 'deleteExpense')
+    {
+      try {
+        deleteItem({
+          key : "expenses",
+          id : values.expenseId
+        });
+        return toast.success(`Expense Deleted`);
+      } catch {
+        throw new Error("There was a problem deleting your account");
+      }
+    }
   }
 
 export default function Dashboard() {
@@ -100,9 +114,17 @@ export default function Dashboard() {
                         && (
                           <div className='grid-md'>
                               <h2>Recent Expenses</h2>
-                              <ExpeneseTable expenses = {expenses.sort((a,b)=> {
-                                return b.createAt - a.createAt;
-                              })}/>
+                              <ExpeneseTable expenses = {
+                                    expenses.sort((a,b)=> {
+                                    return b.createAt - a.createAt;
+                                  }).slice(0,5)
+                              }/>
+                              {expenses.length > 5 && (
+                                <Link to="expenses"
+                                      className='btn btn--dark'>
+                                  View All Expenses
+                                </Link>
+                              )}
                           </div>
                         )
                       }

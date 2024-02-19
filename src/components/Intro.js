@@ -1,4 +1,4 @@
-import { UserPlusIcon } from '@heroicons/react/24/solid'
+import { UserPlusIcon } from '@heroicons/react/24/solid';
 import React from 'react'
 import { Form } from 'react-router-dom';
 

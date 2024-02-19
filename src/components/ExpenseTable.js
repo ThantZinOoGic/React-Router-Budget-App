@@ -1,6 +1,6 @@
 import ExpeneseItem from "./ExpenseItem"
 
-export default function ExpeneseTable({expenses})
+export default function ExpeneseTable({expenses, showBudget = true})
 {
     return(
         <>
@@ -8,7 +8,7 @@ export default function ExpeneseTable({expenses})
                 <thead>
                     <tr>
                         {
-                            ["Name", "Amount", "Date"].map((i,index)=> (
+                            ["Name", "Amount", "Date", showBudget ? "Budget" : "", ""].map((i,index)=> (
                                 <th key={index}>{i}</th>
                             ))
                         }
@@ -19,7 +19,7 @@ export default function ExpeneseTable({expenses})
                         expenses.map((expense) => {
                             return (
                                 <tr key={expense.id}>
-                                    <ExpeneseItem expense={expense}/>
+                                    <ExpeneseItem expense={expense} showBudget={showBudget}/>
                                 </tr>
                             )
                         })
