@@ -33,7 +33,7 @@ export const deleteItem = ({key, id}) => {
     return localStorage.removeItem(key);
 }
 
-//creatte
+//create budget
 export function createBudget ({name, amount})
 {
     const newItem = {

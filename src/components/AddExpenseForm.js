@@ -1,9 +1,12 @@
 import { PlusCircleIcon } from '@heroicons/react/24/solid';
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useFetcher } from 'react-router-dom'
 
 export default function AddExpenseForm({budgets}) {
     const fetcher = useFetcher();
+    // const [expenseName, setExpenseName] = useState("");
+    // const [expenseAmount, setExpenseAmount] = useState("");
+    const error = fetcher.data;
     const formRef = useRef()
     const focusRef = useRef();
     const isSubmitting = fetcher.state === "submitting";
@@ -15,7 +18,6 @@ export default function AddExpenseForm({budgets}) {
             focusRef.current.focus();
         }
     }, [isSubmitting])
-
   return (
     <div className='form-wrapper'>
         <h3 className="h3">
@@ -36,7 +38,9 @@ export default function AddExpenseForm({budgets}) {
                                 id='newExpense'
                                 placeholder='e.g., coffee'
                                 ref={focusRef}
-                                required/>
+                                // value={expenseName}
+                                // onChange={(e) => setExpenseName(e.target.value)}
+                                />
                     </div>
                     <div className="grid-xs">
                         <label htmlFor="newExpenseAmount">Amount</label>
@@ -45,11 +49,18 @@ export default function AddExpenseForm({budgets}) {
                             name='newExpenseAmount'
                             id='newExpenseAmount'
                             placeholder='e.g., $3.50'
-                            required
                             inputMode='decimal'
+                            // value={expenseAmount}
+                            // onChange={(e) => setExpenseAmount(e.target.value)}
                         />
                     </div>
                 </div>
+                <div>
+                {error?.newExpense && <small>{error.newExpense}</small>}
+
+                {error?.newExpenseAmount && <small>{error.newExpenseAmount}</small>}
+                </div>
+
                 <div className="grid-xs" hidden={budgets.length ==1}>
                     <label htmlFor="newExpenseBudget">Budget Category</label>
                     <select name='newExpenseBudget'

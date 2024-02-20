@@ -4,6 +4,7 @@ import { Form, useFetcher } from 'react-router-dom'
 
 export default function AddBudgetForm() {
     const fetcher = useFetcher();
+    const error = fetcher.data; 
     const isSubmitting = fetcher.state === "submitting";
     const formRef = useRef();
     const focusRef = useRef();
@@ -30,9 +31,9 @@ export default function AddBudgetForm() {
                         name='newBudget'
                         id='newBudget'
                         placeholder='e.g., Groceries'
-                        required
                         ref={focusRef}
                 />
+                {error?.newBudget && <small>{error.newBudget}</small>}
             </div>
             <div className="grid-xs">
                 <label htmlFor="newBudgetAmount">Amount</label>
@@ -41,9 +42,9 @@ export default function AddBudgetForm() {
                         name='newBudgetAmount'
                         id='newBudgetAmount'
                         placeholder='e.g., $350'
-                        required
                         inputMode='decimal'
                 />
+                {error?.newBudgetAmount && <small>{error.newBudgetAmount}</small>}
             </div>
             <input type="hidden" name='_action' value='createBudget' />
             <button type='submit' 

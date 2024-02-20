@@ -15,7 +15,7 @@ export default function ExpeneseItem({expense, showBudget})
         <td >{expense.name}</td>
         <td >{formatCurrency(expense.amount)}</td>
         <td >{new Date(expense.createAt).toLocaleDateString()}</td>
-        {showBudget ? <td>
+        {showBudget && budget ? <td>
                             <Link to={`/budgets/${budget.id}`}
                                     style={{ "--accent" : budget.color }}>
                                 {budget.name}  
@@ -23,7 +23,10 @@ export default function ExpeneseItem({expense, showBudget})
                         </td> : ""
         }
         <td>
-            <fetcher.Form method="post">
+            <fetcher.Form method="post"
+                            onSubmit={(e) =>{
+                                if(!window.confirm("Are You Sure went to delete.")) e.preventDefault();
+                            }}>
                 <input type="hidden" name="_action"
                         value="deleteExpense"/>
                 <input type="hidden" name="expenseId" value={expense.id}/>

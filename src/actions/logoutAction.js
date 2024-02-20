@@ -10,11 +10,17 @@ import { toast } from "react-toastify";
 export async function logoutAction()
 {
     //delete user
-    deleteItem('userName');
+    deleteItem({
+        key: 'userName',
+    });
     //delete budget
-    deleteItem('budgets');
+    deleteItem({
+        key : 'budgets',
+    });
     //delete expense
-    deleteItem('expenses');
+    deleteItem({
+        key : 'expenses',
+    });
 
 
     toast.success("You've deleted your account!")

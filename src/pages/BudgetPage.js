@@ -29,17 +29,26 @@ export async function budgetLoader({params})
 export async function budgetAction ({request}) {
     let data = await request.formData();
     let {_action, ...values} = Object.fromEntries(data);
-
+    let error = {};
     
     if(_action == "createExpense")
     {
       try {
+        if(values.newExpense.length === 0){
+          error.newExpense = "Expense Name must have";
+          return error;
+        }
+        if(values.newExpenseAmount.length === 0){
+          error.newExpenseAmount = "Expense Amount must have";
+          return error;
+        }
         //create budget
         createExpense({
           name : values.newExpense,
           amount : values.newExpenseAmount,
           budgetId : values.newExpenseBudget
         });
+
         //toast success message
         return toast.success(`Expense ${values.newExpense} Created`);
       } catch {

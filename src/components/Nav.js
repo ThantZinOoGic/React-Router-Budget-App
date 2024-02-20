@@ -5,7 +5,7 @@ import { Form, NavLink } from 'react-router-dom';
 import logomark from '../assets/logomark.svg';
 
 //lib
-import { BeakerIcon, TrashIcon } from '@heroicons/react/24/solid';
+import { TrashIcon } from '@heroicons/react/24/solid';
 
 export default function Nav({userName}) {
   return (

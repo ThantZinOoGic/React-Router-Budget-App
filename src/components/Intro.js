@@ -1,10 +1,11 @@
 import { UserPlusIcon } from '@heroicons/react/24/solid';
 import React from 'react'
-import { Form } from 'react-router-dom';
+import { Form, useActionData } from 'react-router-dom';
 
 import illustration from '../assets/illustration.jpg'
 
 export default function Intro() {
+    let error = useActionData();
   return (
     <div className='intro'>
         <div>
@@ -19,9 +20,9 @@ export default function Intro() {
                 <input 
                     type='text' 
                     name='userName' 
-                    required 
                     placeholder='What is your name'
                     autoComplete='given-name'/>
+                {error?.userName && <span>{error.userName}</span>}
                 <input type="hidden" name='_action' value='newUser' />
                 <button type='submit' className='btn btn--dark'>
                     <span>Creaete Account</span>

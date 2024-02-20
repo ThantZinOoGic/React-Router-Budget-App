@@ -1,17 +1,18 @@
 // react router dom hook
-import { Link, useLoaderData } from 'react-router-dom';
+import {useLoaderData } from 'react-router-dom';
 
 //component
 
 import Intro from '../components/Intro';
-import AddBudgetForm from '../components/AddBudgetForm';
+
 
 //helper functions
 import { createBudget, createExpense, fetchData, delay, deleteItem } from '../helpers';
+
+//lib
 import { toast } from 'react-toastify';
-import AddExpenseForm from '../components/AddExpenseForm';
-import BudgetItem from '../components/BudgetItem';
-import ExpeneseTable from '../components/ExpenseTable';
+import Display from '../components/Display';
+
 
 export function dashboardLoader ()
 {
@@ -26,10 +27,16 @@ export async function dashboardAction ({request})
     await delay();
     let data = await request.formData();
     let {_action, ...values} = Object.fromEntries(data);
+    let error = {};
+
     //new user submition
-    if(_action == 'newUser')
+    if(_action === 'newUser')
     {
       try {
+        if(values.userName.length === 0){
+          error.userName = "user name must have";
+          return error;
+        }
         localStorage.setItem('userName', JSON.stringify(values.userName))
         return toast.success(`welcome  ${values.userName}`);
       } catch {
@@ -39,9 +46,17 @@ export async function dashboardAction ({request})
 
     //budget
 
-    if(_action == "createBudget")
+    if(_action === "createBudget")
     {
       try {
+        if(values.newBudget.length === 0){
+          error.newBudget = "Budget Name must have";
+          return error;
+        }
+        if(values.newBudgetAmount.length === 0){
+          error.newBudgetAmount = "Budget Amount must have";
+          return error;
+        }
         //create budget
           createBudget({
                         name : values.newBudget,
@@ -56,7 +71,7 @@ export async function dashboardAction ({request})
 
     //expense
 
-    if(_action == "createExpense")
+    if(_action === "createExpense")
     {
       try {
         //create budget
@@ -65,6 +80,14 @@ export async function dashboardAction ({request})
           amount : values.newExpenseAmount,
           budgetId : values.newExpenseBudget
         });
+        if(values.newExpense.length === 0){
+          error.newExpense = "Expense Name must have";
+          return error;
+        }
+        if(values.newExpenseAmount.length === 0){
+          error.newExpenseAmount = "Expense Amount  must have";
+          return error;
+        }
         //toast success message
         return toast.success(`Expense ${values.newExpense} Created`);
       } catch {
@@ -73,7 +96,7 @@ export async function dashboardAction ({request})
     }
 
     //delete expensess
-    if(_action == 'deleteExpense')
+    if(_action === 'deleteExpense')
     {
       try {
         deleteItem({
@@ -91,52 +114,7 @@ export default function Dashboard() {
   const {userName, budgets, expenses} = useLoaderData();
   return (
     <div>{
-        userName ? (<div className='dashboard'>
-          <h1>Welcome Back <span className="accent">{userName}</span></h1>
-          <div className="grid-sm">
-            {budgets && budgets.length >0 ? 
-                    <div className="grid-lg">
-                      <div className="flex-lg">
-                        <AddBudgetForm/>
-                        <AddExpenseForm budgets = {budgets}/>
-                      </div>
-                      <h2>Existing Budgets</h2>
-                      <div className="budgets">
-                        {
-                          budgets.map((budget) => {
-                            return <BudgetItem budget={budget}
-                                                key={budget.id}/>
-                          })
-                        }
-                      </div>
-                      {
-                        expenses && expenses.length > 0 
-                        && (
-                          <div className='grid-md'>
-                              <h2>Recent Expenses</h2>
-                              <ExpeneseTable expenses = {
-                                    expenses.sort((a,b)=> {
-                                    return b.createAt - a.createAt;
-                                  }).slice(0,5)
-                              }/>
-                              {expenses.length > 5 && (
-                                <Link to="expenses"
-                                      className='btn btn--dark'>
-                                  View All Expenses
-                                </Link>
-                              )}
-                          </div>
-                        )
-                      }
-                    </div> : 
-                    <div className="grid-lg">
-                      <p>Personal budgeting is the secret to financial freedom.</p>
-                      <p>Create a budget to get start.</p>
-                      <AddBudgetForm/>
-                    </div> }
-            
-          </div>
-        </div>) : <Intro/>
+        userName ?  <Display userName = {userName} budgets= {budgets} expenses ={expenses}/> : <Intro/>
     }</div>
   )
 }
