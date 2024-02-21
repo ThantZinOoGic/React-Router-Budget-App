@@ -45,6 +45,10 @@ export function createBudget ({name, amount})
     };
 
     const existingBudget = fetchData("budgets") ?? [];
+    const isExit = existingBudget.filter(item => item.name === name);
+    if(isExit.length > 0){
+        return null;
+    }
     return localStorage.setItem("budgets", JSON.stringify([...existingBudget, newItem]));
 }
 

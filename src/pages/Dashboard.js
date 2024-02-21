@@ -58,12 +58,15 @@ export async function dashboardAction ({request})
           return error;
         }
         //create budget
-          createBudget({
+          let isExit = createBudget({
                         name : values.newBudget,
                         amount : values.newBudgetAmount
                       });
         //toast success message
-        return toast.success(`Budget Created`);
+        if(isExit == null)
+        {
+          return toast.error("Budget is exist! Can't Create");
+        } return toast.success(`Budget Created`);
       } catch {
         throw new Error("There was a problem creating your Budget");
       }
