@@ -58,15 +58,16 @@ export async function dashboardAction ({request})
           return error;
         }
         //create budget
-          let isExit = createBudget({
+          let isValid = createBudget({
                         name : values.newBudget,
                         amount : values.newBudgetAmount
                       });
         //toast success message
-        if(isExit == null)
+        if(isValid)
         {
-          return toast.error("Budget is exist! Can't Create");
-        } return toast.success(`Budget Created`);
+          return toast.error("Budget can't Create! Input are invalid");
+        }
+        return toast.success(`Budget Created`);
       } catch {
         throw new Error("There was a problem creating your Budget");
       }
@@ -78,7 +79,7 @@ export async function dashboardAction ({request})
     {
       try {
         //create budget
-        createExpense({
+        let isInvalid = createExpense({
           name : values.newExpense,
           amount : values.newExpenseAmount,
           budgetId : values.newExpenseBudget
@@ -90,6 +91,9 @@ export async function dashboardAction ({request})
         if(values.newExpenseAmount.length === 0){
           error.newExpenseAmount = "Expense Amount  must have";
           return error;
+        }
+        if(isInvalid){
+          return toast.error(`Expense Amount is invalid!`);
         }
         //toast success message
         return toast.success(`Expense ${values.newExpense} Created`);

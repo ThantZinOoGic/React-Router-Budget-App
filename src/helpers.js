@@ -46,15 +46,19 @@ export function createBudget ({name, amount})
 
     const existingBudget = fetchData("budgets") ?? [];
     const isExit = existingBudget.filter(item => item.name === name);
-    if(isExit.length > 0){
-        return null;
+    console.log(amount > 0)
+    if(isExit.length === 0 && amount > 0){
+        return localStorage.setItem("budgets", JSON.stringify([...existingBudget, newItem]));
     }
-    return localStorage.setItem("budgets", JSON.stringify([...existingBudget, newItem]));
+    return true;
 }
 
 // create expense 
 export function createExpense ({name, amount, budgetId})
 {
+    if(amount <= 0){
+        return true;
+    }
     const newItem = {
         id : crypto.randomUUID(),
         name : name,
@@ -62,6 +66,7 @@ export function createExpense ({name, amount, budgetId})
         createAt : Date.now(),
         budgetId : budgetId
     };
+
 
     const existingExpenses = fetchData("expenses") ?? [];
     return localStorage.setItem("expenses", JSON.stringify([...existingExpenses, newItem]));
